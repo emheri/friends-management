@@ -45,7 +45,7 @@ RSpec.describe Api::V1::UsersController, type: :request do
       end
     end
 
-    context 'when email has not registered' do
+    context 'when email has not been registered' do
       before { post "#{version}/friends/connect", params: friends }
       
       it 'returns status code 400' do
@@ -89,6 +89,39 @@ RSpec.describe Api::V1::UsersController, type: :request do
       it 'return status code 404' do
         expect(response).to have_http_status(404)
         expect(response.body).to eq({errors: {success: false, message: "Couldn't find user with email #{email[:email]}"}}.to_json)
+      end
+    end
+  end
+
+  describe 'POST /api/v1/friends/common' do
+    let(:friends) { { friends: ['foo@example.com', 'bar@example.com'] } }
+
+    context 'when have common friend' do
+      before {
+        foo = User.create!(email: 'foo@example.com')
+        bar = User.create!(email: 'bar@example.com')
+        com = User.create!(email: 'common@example.com')
+        Friend.create!(user_id: foo.id, friend_id: bar.id)
+        Friend.create!(user_id: foo.id, friend_id: com.id)
+        Friend.create!(user_id: bar.id, friend_id: foo.id)
+        Friend.create!(user_id: bar.id, friend_id: com.id)
+        Friend.create!(user_id: com.id, friend_id: foo.id)
+        Friend.create!(user_id: com.id, friend_id: bar.id)
+      }
+      before { post "#{version}/friends/common", params: friends }
+
+      it 'return common friend' do
+        expect(response).to have_http_status(200)
+        expect(response.body).to eq({success: true, friends: ["common@example.com"], count: 1}.to_json)
+      end
+    end
+
+    context 'when email has not been registered' do
+      before { post "#{version}/friends/common", params: friends }
+
+      it 'return status code 400' do
+        expect(response).to have_http_status(400)
+        expect(response.body).to eq({errors: {success: false, message: "The following emails #{friends[:friends]} has not been registered"}}.to_json)
       end
     end
   end

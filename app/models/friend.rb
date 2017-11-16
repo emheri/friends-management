@@ -17,6 +17,12 @@ class Friend < ApplicationRecord
   def self.find_connection(user_id, friend_id)
     self.where("user_id = ? AND friend_id = ?", user_id, friend_id)
   end
+
+  def self.common(first, second)
+    a = first.friendships
+    b = second.friendships
+    return a.select{|x| b.include?(x)}.map(&:email) || []
+  end
   #--
   
 end

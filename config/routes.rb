@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       namespace :friends do
         post :connect
         post :list
+        post :common
       end
     end
   end
