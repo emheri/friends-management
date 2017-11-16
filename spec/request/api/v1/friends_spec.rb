@@ -64,4 +64,32 @@ RSpec.describe Api::V1::UsersController, type: :request do
       end
     end
   end
+
+  describe 'POST /api/v1/friends/list' do
+    before {
+      foo = User.create!(email: 'foo@example.com')
+      bar = User.create!(email: 'bar@example.com')
+      Friend.create!(user_id: foo.id, friend_id: bar.id)
+    }
+
+    context 'when have valid user' do
+      let(:email) { { email: 'foo@example.com' } }
+      before { post "#{version}/friends/list", params: email }
+
+      it 'return friend list' do
+        expect(response).to have_http_status(200)
+        expect(response.body).to eq({success: true, friends: ["bar@example.com"], count: 1}.to_json)
+      end
+    end
+
+    context 'when user has not been registered' do
+      let(:email) { { email: 'andy@example.com' } }
+      before { post "#{version}/friends/list", params: email }
+
+      it 'return status code 404' do
+        expect(response).to have_http_status(404)
+        expect(response.body).to eq({errors: {success: false, message: "Couldn't find user with email #{email[:email]}"}}.to_json)
+      end
+    end
+  end
 end

@@ -18,10 +18,25 @@ module Api::V1
       end
     end
 
+    api :POST, '/friends/list', 'Get friend list from an email'
+    param :email, String, required: true
+    def list
+      user = User.find_by_email(email_params[:email])
+      if user
+        raw_response({success: true, friends: user.friend_list, count: user.friends.count})
+      else
+        error_response({success: false, message: "Couldn't find user with email #{email_params[:email]}"}, :not_found)
+      end
+    end
+
     private
 
     def friends_params
       params.permit(friends: [])
+    end
+
+    def email_params
+      params.permit(:email)
     end
   end
 end

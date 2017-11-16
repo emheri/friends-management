@@ -3,6 +3,7 @@ class Friend < ApplicationRecord
   # belongs_to
   #++
   belongs_to :user
+  belongs_to :friend, class_name: "User"
   #--
 
   # validations
