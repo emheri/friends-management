@@ -20,8 +20,6 @@ RSpec.describe Api::V1::UsersController, type: :request do
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
       end
-
-
     end
   end
 end
