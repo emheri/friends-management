@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::UsersController, type: :request do
+RSpec.describe Api::V1::FriendsController, type: :request do
   let(:version) { '/api/v1' }
   
   describe 'POST /api/v1/friends/connect' do

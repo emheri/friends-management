@@ -7,6 +7,7 @@ Rails.application.routes.draw do
         post :list
         post :common
       end
+      resources :subscribes, only: :create
     end
   end
 
