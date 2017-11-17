@@ -8,6 +8,8 @@ class User < ApplicationRecord
   has_many :subscriber, through: :subscribes, source: "subscriber"
   has_many :follows, class_name: "Subscribe", foreign_key: "subscriber_id"
   has_many :followings, through: :follows, source: "user"
+  has_many :blocks
+  has_many :blokers, through: :blocks, source: "blocked"
   #--
 
   # validations

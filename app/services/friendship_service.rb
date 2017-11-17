@@ -6,12 +6,16 @@ class FriendshipService
     @emails = emails
     @users = []
     @invalid_emails = []
+    find_users
   end
 
   def validate_connection
     success = true
-    unless registered_emails?
+    if !registered_emails?
       message = "The following emails #{@invalid_emails} has not been registered"
+      success = false
+    elsif is_blocked?
+      message = "emails are blocked"
       success = false
     end
     unless valid_email_number?
@@ -22,7 +26,7 @@ class FriendshipService
       message = "Can't create connection with same email"
       success = false
     end
-
+  
     return {success: success, message: message}
   end
 
@@ -44,6 +48,10 @@ class FriendshipService
   end
 
   def registered_emails?
+    return @users.count == 2 ? true : false
+  end
+
+  def find_users
     @emails.each do |email|
       user = User.find_by_email(email)
       if user
@@ -52,12 +60,14 @@ class FriendshipService
         @invalid_emails << email
       end
     end
-
-    return @users.count == 2 ? true : false
   end
 
   def same_email?
     return @emails[0] == @emails[1] ? true : false
+  end
+
+  def is_blocked?
+    Block.is_blocked?(@users[0].id, @users[1].id)
   end
 
 end

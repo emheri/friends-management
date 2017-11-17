@@ -1,5 +1,5 @@
-class SubscribeService
-
+class BlockService
+    
   attr_accessor :requestor, :target, :error_messages
   
   def initialize(requestor, target)
@@ -8,8 +8,8 @@ class SubscribeService
     @error_messages = []
   end
 
-  def subscribe
-    Subscribe.create!({user_id: @target.id, subscriber_id: @requestor.id})
+  def block
+    Block.create!({user_id: @requestor.id, blocked_id: @target.id})
   end
 
   def validate

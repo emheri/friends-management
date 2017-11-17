@@ -63,6 +63,21 @@ RSpec.describe Api::V1::FriendsController, type: :request do
         expect(response.body).to eq({errors: {success: false, message: "Can't create connection with same email"}}.to_json)
       end
     end
+
+    context 'when emails got blocked' do
+      before {
+        user_one = User.create!(email: 'foo@example.com')
+        user_two = User.create!(email: 'bar@example.com')
+        Block.create!({user_id: user_one.id, blocked_id: user_two.id})
+      }
+      let(:request) { { friends: ['foo@example.com', 'bar@example.com'] } }
+      before { post "#{version}/friends/connect", params: request }
+
+      it 'returns status code 400' do
+        expect(response).to have_http_status(400)
+        expect(response.body).to eq({errors: {success: false, message: "emails are blocked"}}.to_json)
+      end
+    end
   end
 
   describe 'POST /api/v1/friends/list' do
