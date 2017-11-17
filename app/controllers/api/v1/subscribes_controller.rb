@@ -2,8 +2,8 @@ module Api::V1
   class Api::V1::SubscribesController < Api::V1::ApiController
 
     api :POST, '/subscribes', 'Subscribe to update from an email address'
-    param :requestor, String, required: true
-    param :target, String, required: true
+    param :requestor, String, required: true, desc: "Requestor email"
+    param :target, String, required: true, desc: "Target subscribe email"
     def create
       subscribe_service = SubscribeService.new(subscribes_params[:requestor], subscribes_params[:target])
       if subscribe_service.validate

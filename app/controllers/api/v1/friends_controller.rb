@@ -3,7 +3,7 @@ module Api::V1
     before_action :set_friend_service, only: [:connect, :common]
 
     api :POST, '/friends/connect', 'Connecting two emails'
-    param :friends, Array, of: String, required: true
+    param :friends, Array, of: String, required: true, desc: "Two emails which will be connected"
     def connect
       response = @connection.validate_connection
       if response[:success]
@@ -19,7 +19,7 @@ module Api::V1
     end
 
     api :POST, '/friends/list', 'Get friend list from an email'
-    param :email, String, required: true
+    param :email, String, required: true, desc: "friend list from user email"
     def list
       user = User.find_by_email(email_params[:email])
       if user
@@ -30,7 +30,7 @@ module Api::V1
     end
 
     api :POST, '/friends/common', 'Find common friends between two emails'
-    param :friends, Array, of: String, required: true
+    param :friends, Array, of: String, required: true, desc: "Two emails that have common friends"
     def common
       response = @connection.validate_connection
       if response[:success]

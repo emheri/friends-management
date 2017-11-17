@@ -2,15 +2,15 @@ module Api::V1
   class Api::V1::UsersController < Api::V1::ApiController
 
     api :POST, '/users', 'Register new user'
-    param :email, String, required: true
+    param :email, String, required: true, desc: "user email"
     def create
       user = User.create!(user_params)
       raw_response({message: 'User successfully registered'}, :created)
     end
 
     api :POST, '/users/notifications', 'Send notifications to followers'
-    param :sender, String, required: true
-    param :text, String, required: true
+    param :sender, String, required: true, desc: "email sender"
+    param :text, String, required: true, desc: "text that will be send"
     def notifications
       sender = User.find_by_email(notification_params[:sender])
       if sender
