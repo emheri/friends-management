@@ -12,3 +12,21 @@ Tool | Description
 **[PostgreSQL](https://www.postgresql.org/)** | Database
 **[Apipie](https://github.com/Apipie/apipie-rails)** | API documentation (customized)
 
+### Installation
+
+How to [Install Rails](http://installrails.com/)
+
+```sh
+$ git clone git@github.com:emheri/friends-management.git
+$ cd friends-management
+$ bundle install
+$ rake db:create && rake db:migrate
+$ rails s
+```
+
+### Run Unit Testing
+
+```sh
+$ cd friends-management
+$ bundle exec rspec spec/
+```
