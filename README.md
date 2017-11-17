@@ -32,3 +32,4 @@ $ bundle exec rspec spec/
 ```
 
 [API documentations](https://arcane-shelf-95028.herokuapp.com/apipie)
+[Coverage files](https://arcane-shelf-95028.herokuapp.com/coverage/#_AllFiles)
